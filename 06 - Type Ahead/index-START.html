@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+function $$(element) { return document.querySelectorAll(element); }
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function findMatches(words, cities) {
+  return cities
+          .filter(place => {
+            const regex = new RegExp(words, 'gi');
+            return place.city.match(regex);
+          })
+          .sort((a, b) => {
+            return a.population - b.population;
+          })
+}
+
+function showResult() {
+  const matchedArray = findMatches(this.value, cities);
+  const html = matchedArray.map(place => {
+    const regex = new RegExp(this.value, 'gi');
+    const name = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+    const state = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+    const population = numberWithCommas(place.population);
+    return `
+    <li>
+      <span class="name">${name}, ${state}</span>
+      <span class="population">${population}</span>
+    </li>
+    `
+  }).join('');
+  display.innerHTML = html;
+}
+
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+const cities = [];
+const searchInput = $$('.search')[0];
+const display = $$('.suggestions')[0];
+
+fetch(endpoint)
+  .then(response => response.json())
+  .then(data => cities.push(...data));
+
+searchInput.addEventListener('keyup', showResult);
+
+</script>
+  </body>
+</html>
