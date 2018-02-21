@@ -7,11 +7,65 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+  let canvas = document.getElementById('draw');
+  let ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx.lineJoin = 'round'; // The style of the join point of two lines
+  ctx.lineCap = 'round'; // The style of the end caps for a line
+  ctx.lineWidth = 1;
+
+  let isDraw = false;
+  let enlargeLine;
+  let hue = 0;
+  let lastPos = {x: 0, y: 0};
+
+  const draw = (e) => {
+
+    if (!isDraw) { return; }
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.beginPath();
+    ctx.moveTo(lastPos.x, lastPos.y); // Starting point
+    ctx.lineTo(e.offsetX, e.offsetY); // Ending point
+    ctx.stroke();
+
+    lastPos = {x: e.offsetX, y: e.offsetY};
+    hue++;
+    if (hue > 360) { hue = 0; }
+
+    if (ctx.lineWidth >= 50) {
+      enlargeLine = false;
+    }
+    if (ctx.lineWidth <= 1) {
+      enlargeLine = true;
+    }
+    enlargeLine ? ctx.lineWidth++ : ctx.lineWidth--;
+
+  }
+
+  canvas.addEventListener('mousedown', (e) => {
+    isDraw = true;
+    lastPos = {x: e.offsetX, y: e.offsetY};
+  });
+
+  canvas.addEventListener('mouseup', (e) => {
+    isDraw = false;
+  });
+
+  canvas.addEventListener('mouseout', (e) => {
+    isDraw = false;
+  });
+
+  canvas.addEventListener('mousemove', draw);
+
 </script>
 
 <style>
   html, body {
     margin:0;
+  }
+  canvas {
+    border: solid #000 10px;
   }
 </style>
 
