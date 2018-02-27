@@ -7,6 +7,25 @@
 </head>
 <body>
 <script>
+  let pressedKey = [];
+  let targetKey = 'javascript';
+
+  window.addEventListener('keyup', (e) => {
+
+    if (pressedKey.length < targetKey.length) {
+      pressedKey.push(e.key);
+    } else {
+      pressedKey.shift();
+      pressedKey.push(e.key);
+    }
+
+    console.log(pressedKey);
+
+    if (pressedKey.join('').includes(targetKey) ) {
+      console.log('bingo!');
+    }
+    
+  })
 </script>
 </body>
 </html>
