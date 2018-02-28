@@ -12,6 +12,7 @@
 
   window.addEventListener('keyup', (e) => {
 
+    // Method 1
     if (pressedKey.length < targetKey.length) {
       pressedKey.push(e.key);
     } else {
@@ -19,10 +20,15 @@
       pressedKey.push(e.key);
     }
 
+    // Method 2
+    // pressedKey.push(e.key);
+    // pressedKey.splice(0, pressedKey.length - targetKey.length);
+
     console.log(pressedKey);
 
     if (pressedKey.join('').includes(targetKey) ) {
       console.log('bingo!');
+      cornify_add();
     }
     
   })
