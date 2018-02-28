@@ -8,11 +8,26 @@
 
   <script>
     // start with strings, numbers and booleans
+    // let name = 'ada';
+    // let name2 = name;
+    // console.log(name2);
+
+    // let mark = 88;
+    // let mark2 = mark;
+    // console.log(mark2);
+
+    // let marryMe = true;
+    // let marryMe2 = marryMe;
+    // console.log(marryMe2);
+    
 
     // Let's say we have an array
     const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
 
     // and we want to make a copy of it.
+    // const team = players;
+    // team[0] = 'apple';
+    // console.log(team, players);
 
     // You might think we can just do something like this:
 
@@ -27,24 +42,73 @@
     // So, how do we fix this? We take a copy instead!
 
     // one way
+    // const team2 = players.slice();
+    // team2[0] = 'apple';
+    // console.log(team2, players);
 
     // or create a new array and concat the old one in
-
+    // const team3 = [].concat(players);
+    // team3[0] = 'apple';
+    // console.log(team3, players);
+    
     // or use the new ES6 Spread
+    // const team4 = [...players];
+    // team4[0] = 'apple';
+    // console.log(team4, players);
+
+
+    // OR MORE!!!
+    // const team5 = Array.from(players);
+    // const team6 = Array.prototype.slice.apply(players);
+
+
+
+
 
     // now when we update it, the original one isn't changed
 
     // The same thing goes for objects, let's say we have a person object
 
     // with Objects
+    const person = {
+      name: 'johnson',
+      like: 'javascript'
+    }
 
     // and think we make a copy:
+    // const person1 = person;
+    // person1.like = 'ruby';
+    // console.log(person1, person);
 
     // how do we take a copy instead?
+    // const person2 = Object.assign({}, person, {like: 'ruby'});
+    // console.log(person2, person);
 
     // We will hopefully soon see the object ...spread
+    // const person3 = {...person};
+    // person3.like = 'ruby';
+    // console.log(person3, person);
 
     // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+    const johnson = {
+      name: 'johnson',
+      like: {
+        language: ['ruby', 'javascript']
+      }
+    }
+
+    /*
+      Object.assign({}, johnson) is only working on the 1-level deep
+      */
+    // const johnson1 = Object.assign({}, johnson);
+    // johnson1.like.language.push('css');
+    // console.log(johnson1, johnson);
+    
+    // not well tested deep-clone method
+    const johnson2 = JSON.parse(JSON.stringify(johnson));
+    johnson2.like.language.push('css');
+    console.log(johnson2, johnson);
+    
 
   </script>
 
