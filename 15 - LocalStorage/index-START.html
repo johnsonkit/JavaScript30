@@ -15,7 +15,11 @@
 
   <div class="wrapper">
     <h2>LOCAL TAPAS</h2>
-    <p></p>
+    <p>
+      <a id="checkAll">Check all</a>
+      <a id="uncheckAll">Uncheck all</a>
+      <a id="deleteAll">Delete all</a>
+    </p>
     <ul class="plates">
       <li>Loading Tapas...</li>
     </ul>
@@ -28,7 +32,113 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const checkAll = document.querySelector('#checkAll');
+  const uncheckAll = document.querySelector('#uncheckAll');
+  const deleteAll = document.querySelector('#deleteAll');
+  let items = JSON.parse(localStorage.getItem('items')) || [];
+
+  function init() {
+    // update the listing of items
+    updateListingItems(items, itemsList);
+  }
+
+
+
+  addItems.addEventListener('submit', handleSubmit);
+  itemsList.addEventListener('click', handleItemClicked);
+  checkAll.addEventListener('click', handleCheckAll);
+  uncheckAll.addEventListener('click', handleUncheckAll);
+  deleteAll.addEventListener('click', handleDeleteAll);
+
+
+  function updateListingItems(lists = [], targetDiv) {
+
+    targetDiv.innerHTML = lists.map((item, i) => {
+      return `
+        <li>
+          <input type="checkbox" data-index="${i}" id="item-${i}" ${item.checked ? 'checked' : ''}>
+          <label for="item-${i}">${item.name}</label>
+        </li>
+      `
+    }).join('');
+  
+  }
+
+  function handleSubmit(e) {
+
+    e.preventDefault();
+
+    const enteredText = addItems.querySelector('[name="item"]').value;
+
+    // form custom object
+    const item = {
+      name: enteredText,
+      checked: false
+    }
+
+    // add to items array
+    items.push(item);
+
+    // update listing of items
+    updateListingItems(items, itemsList);
+
+    // store items array to localStorage
+    localStorage.setItem('items', JSON.stringify(items));
+
+    // clear the previous input text
+    this.reset();
+
+  }
+
+  function handleItemClicked(e) {
+
+    if (e.target.nodeName === 'INPUT') {
+      const el = e.target; 
+      const targetIndex = el.dataset.index;
+
+      // update target object's value and then save it to localStorage as well
+      items[targetIndex].checked = !items[targetIndex].checked;
+      localStorage.setItem('items', JSON.stringify(items));
+
+      // update listing of items
+      updateListingItems(items, itemsList);
+      
+    }
+    
+  }
+
+
+  function handleCheckAll(e) {
+    
+    // update item's object value and then save it to localStorage as well
+    items.forEach(item => { item.checked = true; })
+    localStorage.setItem('items', JSON.stringify(items));
+
+    // update listing of items
+    updateListingItems(items, itemsList);
+  }
+
+  function handleUncheckAll(e) {
+
+    // update item's object value and then save it to localStorage as well
+    items.forEach(item => { item.checked = false; })
+    localStorage.setItem('items', JSON.stringify(items));
+
+    // update listing of items
+    updateListingItems(items, itemsList);
+  }
+
+  function handleDeleteAll(e) {
+
+    // set items array to empty and then save it to localStorage as well
+    items = [];
+    localStorage.removeItem('items');
+    
+    // update listing of items
+    updateListingItems(items, itemsList);
+  }
+
+  init();
 
 </script>
 
