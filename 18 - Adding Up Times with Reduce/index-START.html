@@ -182,6 +182,45 @@
     </li>
   </ul>
 <script>
+  const dataTime = Array.from(document.querySelectorAll('[data-time]'));
+
+  const formatSeconds = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor((seconds % 3600) % 60);
+    const output = `h: ${h}, m: ${m}, s: ${s}`;
+    console.log(output);
+    return output;
+  }
+
+  const totalInSecond = 
+  dataTime
+    .map(item => {
+      // Method 1
+      // const m = parseInt(item.dataset.time.split(':')[0], 10);
+      // const s = parseInt(item.dataset.time.split(':')[1], 10);
+      
+      // Method 2
+      const [m, s] = item.dataset.time.split(':').map(Number);
+      
+      const videoInSeconds = (m * 60) + s;
+      // console.log(`minutes: ${m}, seconds: ${s}, total seconds: ${videoInSeconds}`);
+      return videoInSeconds;
+    })
+    .reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    });
+
+  
+  console.log(totalInSecond);
+
+  // formatSeconds(1);
+  // formatSeconds(60);
+  // formatSeconds(3600);
+  // formatSeconds(3660);
+  // formatSeconds(3661);
+  formatSeconds(totalInSecond);
+  
 </script>
 </body>
 </html>
