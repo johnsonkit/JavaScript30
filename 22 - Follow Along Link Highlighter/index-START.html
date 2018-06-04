@@ -27,6 +27,33 @@
 
   <script>
     // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+    const spanEl = document.createElement('span');
+    spanEl.classList.add('highlight');
+    document.body.appendChild(spanEl);
+
+    const aEls = document.querySelectorAll('a');
+    function handleMouseoverLink() {
+      const _thisCoords = this.getBoundingClientRect();
+      console.log(_thisCoords);
+      
+      const coords = {
+        x: _thisCoords.x + window.scrollX,
+        y: _thisCoords.y + window.scrollY,
+        width: _thisCoords.width,
+        height: _thisCoords.height
+      }
+
+      spanEl.style.width = `${coords.width}px`;
+      spanEl.style.height = `${coords.height}px`;
+      spanEl.style.top = `${coords.y}px`;
+      spanEl.style.left = `${coords.x}px`;
+      
+    }
+
+    aEls.forEach(el => {
+      el.addEventListener('mouseenter', handleMouseoverLink)
+    });
+
   </script>
 </body>
 </html>
