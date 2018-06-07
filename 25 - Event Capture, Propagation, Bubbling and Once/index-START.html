@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <title>Understanding JavaScript's Capture</title>
 </head>
-<body class="bod">
-
+<body class="body">
   <div class="one">
     <div class="two">
-      <div class="three">
-      </div>
+      <div class="three"></div>
     </div>
   </div>
+  
 
 <style>
   html {
@@ -25,20 +24,34 @@
   }
 
   .one {
-    background: thistle;
+    background-color: orange;
   }
 
   .two {
-    background:mistyrose;
+    background-color: tomato;
   }
 
   .three {
-    background:coral;
+    background-color: thistle;
   }
+
 </style>
 
-<button></button>
+<button class="one-time-button">Click once only</button>
 <script>
+
+  function logInfo(e) {
+    console.log(this.className);
+    e.stopPropagation();
+  }
+
+  // document.body.addEventListener('click', logInfo);
+
+  document.querySelectorAll('div').forEach(el => {
+    el.addEventListener('click', logInfo, { capture: false });
+  });
+
+  document.querySelector('button').addEventListener('click', logInfo, { once: true });
 
 </script>
 </body>
