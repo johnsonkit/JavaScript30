@@ -149,7 +149,7 @@
     background: #fff;
     border-radius: 4px;
     box-shadow: 0 50px 100px rgba(50,50,93,.1), 0 15px 35px rgba(50,50,93,.15), 0 5px 15px rgba(0,0,0,.1);
-    transition:all 0.3s, opacity 0.1s, transform 0.2s;
+    transition: opacity 0.1s;
     transform-origin: 50% 0;
     display: flex;
     justify-content: center;
@@ -214,6 +214,53 @@
 </style>
 
 <script>
+  const navEl = document.querySelector('.top');
+  const bgEl = document.querySelector('.dropdownBackground');
+  const triggerEls = document.querySelectorAll('.cool > li');
+
+  function handleEnter() {
+
+    // add 'trigger-enter' class
+    this.classList.add('trigger-enter');
+
+    // add 'trigger-enter-active' class after 10ms
+    setTimeout(() => {
+      this.classList.contains('trigger-enter') && this.classList.add('trigger-enter-active');
+    }, 10);
+
+
+    const dropdown = this.querySelector('.dropdown');
+
+    // get dropdownCoords and navCoords
+    const dropdownCoords = dropdown.getBoundingClientRect();
+    const navCoords = navEl.getBoundingClientRect();
+    const coords = {
+      width: dropdownCoords.width,
+      height: dropdownCoords.height,
+      top: dropdownCoords.top - navCoords.top,
+      left: dropdownCoords.left - navCoords.left
+    };
+
+    // open dropdown background & change it's styling
+    bgEl.classList.add('open');
+    bgEl.style.width = `${coords.width}px`;
+    bgEl.style.height = `${coords.height}px`;
+    bgEl.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
+  }
+
+  function handleLeave() {
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    bgEl.classList.remove('open');
+  }
+
+  triggerEls.forEach(trigger => {
+    trigger.addEventListener('mouseenter', handleEnter);
+  });
+  
+  triggerEls.forEach(trigger => {
+    trigger.addEventListener('mouseleave', handleLeave)
+  });
+
 </script>
 
 </body>
