@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>Click and Drag</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .items {
+      margin: 100px;
+    }
+  </style>
 </head>
 <body>
   <div class="items">
@@ -35,6 +41,37 @@
   </div>
 
 <script>
+const itemsEl = document.querySelector('.items');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+itemsEl.addEventListener('mousedown', (e) => {
+  isDown = true;
+  itemsEl.classList.add('active');
+  startX = e.pageX - itemsEl.offsetLeft;
+  scrollLeft = itemsEl.scrollLeft;
+});
+
+itemsEl.addEventListener('mouseup', () => {
+  isDown = false;
+  itemsEl.classList.remove('active');
+});
+
+itemsEl.addEventListener('mouseleave', () => {
+  isDown = false;
+  itemsEl.classList.remove('active');
+});
+
+itemsEl.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - itemsEl.offsetLeft;
+  const walk = (x - startX) * 3;
+  itemsEl.scrollLeft = scrollLeft - walk;
+});
+
+
 </script>
 
   </body>
