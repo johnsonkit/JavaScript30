@@ -36,6 +36,68 @@
   const holes = document.querySelectorAll('.hole');
   const scoreBoard = document.querySelector('.score');
   const moles = document.querySelectorAll('.mole');
+  let lastHole;
+  let timeUp = false;
+  let score = 0;
+
+  // Game variable setting
+  const GAME_DURATION = 10000;
+  const RAMDOM_TIME_MIN = 200;
+  const RAMDOM_TIME_MAX = 2000;
+
+
+  function randomTime(min, max) {
+    // Math.round(Math.random()) return 0 or 1
+    return Math.round(Math.random() * (max - min) + min);
+  }
+
+  function randomHole(holes) {
+    // return 0 - 5 
+    const idx = Math.floor(Math.random() * holes.length);
+    const hole = holes[idx];
+    // console.log(idx);
+    if (holes[idx] === lastHole) {
+      console.log('repeat');
+      return randomHole(holes);
+    }
+    lastHole = hole;
+    return hole;
+  }
+
+  function peek() {
+    const time = randomTime(RAMDOM_TIME_MIN, RAMDOM_TIME_MAX);
+    const hole = randomHole(holes);
+
+    hole.classList.add('up');
+    
+    setTimeout(() => {
+      hole.classList.remove('up');
+      if (!timeUp) {
+        peek();
+      }
+    }, time);
+    console.log({time, hole});
+  }
+
+  function bonk(e) {
+    if (!e.isTrusted) return;
+    score++;
+    this.classList.remove('up');
+    scoreBoard.textContent = score;
+  }
+
+  function startGame() {
+    scoreBoard.textContent = 0;
+    timeUp = false;
+    peek();
+
+    // End the game after GAME_DURATION seconds
+    setTimeout(() => {
+      timeUp = true;
+    }, GAME_DURATION);
+  }
+
+  moles.forEach(mole => mole.addEventListener('click', bonk));
 
 </script>
 </body>
